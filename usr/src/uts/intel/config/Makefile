@@ -22,6 +22,7 @@
 # uts/intel/config/Makefile
 # Copyright 2010 Nexenta Systems, Inc.  All rights reserved.
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
+# Copyright 2018 RackTop Systems.
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
@@ -95,7 +96,7 @@ $(ROOTETCSEC)/%: $(SRCDIR)/%
 $(ROOTBOOT):
 	$(INS) -s -d -m $(DIRMODE) $@
 
-$(ROOTBOOT)/%: $(ROOTBOOT) $(SRCDIR)/%
+$(ROOTBOOT)/%: $(SRCDIR)/% $(ROOTBOOT)
 	$(INS.file)
 
 $(ROOTBOOT)/solaris.xpm: $(ROOTBOOT)/splashimage.xpm
@@ -105,7 +106,7 @@ $(ROOTBOOT)/solaris.xpm: $(ROOTBOOT)/splashimage.xpm
 $(BOOTSOLARIS):
 	$(INS) -s -d -m $(DIRMODE) $@
 
-$(BOOTSOLARIS)/%: $(BOOTSOLARIS) $(SRCDIR)/%
+$(BOOTSOLARIS)/%: $(SRCDIR)/% $(BOOTSOLARIS)
 	$(INS.file)
 
 $(BOOTDEVICEDB):

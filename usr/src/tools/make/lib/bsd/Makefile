@@ -10,6 +10,7 @@
 #
 
 # Copyright 2015, Richard Lowe.
+# Copyright 2018 RackTop Systems.
 
 LIBRARY = libbsd.a
 VERS = .1
@@ -20,6 +21,7 @@ include ../../Makefile.com
 
 LIBS = $(LIBRARY)
 SRCDIR = $(SRC)/cmd/make/lib/bsd
+SRCS = $(OBJECTS:%.o=$(SRCDIR)/%.cc)
 CPPFLAGS += -D_FILE_OFFSET_BITS=64
 
 all: $(LIBS)

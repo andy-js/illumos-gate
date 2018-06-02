@@ -20,13 +20,14 @@
 #
 #
 # Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 #
 # Definitions common to command source.
 #
 # include global definitions; SRC should be defined in the shell.
 # SRC is needed until RFE 1026993 is implemented.
 
-include $(SRC)/Makefile.master
+$(NEED_MASTER)include $(SRC)/Makefile.master
 
 LN=		ln
 SH=		sh

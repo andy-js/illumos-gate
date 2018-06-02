@@ -23,6 +23,7 @@
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
 # Copyright 2016 RackTop Systems.
 # Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright 2019, Joyent, Inc.
 #
 #
@@ -31,7 +32,7 @@
 # include global definitions; SRC should be defined in the shell.
 # SRC is needed until RFE 1026993 is implemented.
 
-include		$(SRC)/Makefile.master
+$(NEED_MASTER)include $(SRC)/Makefile.master
 
 LORDER=		lorder
 TSORT=		tsort
