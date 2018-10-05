@@ -22,6 +22,8 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 
 SUBDIR =	sunos	
 
@@ -68,6 +70,11 @@ $(HAL_LIB) :=	LDLIBS += -lc -ldbus-1 -lpolkit $(ZIGNORE) -lglib-2.0
 $(STORAGE_PROG)	:=	LDLIBS += -lc -ldbus-1 -lglib-2.0 -lhal -lhal-storage -lbsm
 
 $(STORAGE_METHOD_PROG) := LDLIBS += -lpolkit
+
+# Allow HAL to take some of its dependencies from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libdbus-1.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libdbus-glib-1.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libglib-2.0.so
 
 CPPFLAGS += $(HAL_DBUS_CPPFLAGS) $(HAL_GLIB_CPPFLAGS) $(HAL_CONFIG_CPPFLAGS)
 CPPFLAGS += -I$(ROOT)/usr/include/hal

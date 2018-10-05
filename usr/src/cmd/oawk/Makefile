@@ -23,7 +23,9 @@
 # Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 include		../Makefile.cmd
 
@@ -51,6 +53,7 @@ NATIVEOBJS =	$(NATIVEDIR)/makeprctab.o $(NATIVEDIR)/tmptoken.o
 $(MAKEPRCTAB) :=	CC = $(NATIVECC)
 $(MAKEPRCTAB) :=	POST_PROCESS=
 $(MAKEPRCTAB) :=	POST_PROCESS_O=
+$(MAKEPRCTAB) :=	ZASSERTDEFLIB=
 
 CLEANFILES =	proctab.c y.tab.h y.tab.c awk.h awk.g.c		\
 		tmptoken.c awk.lx.c $(NATIVEOBJS) $(MAKEPRCTAB)	\

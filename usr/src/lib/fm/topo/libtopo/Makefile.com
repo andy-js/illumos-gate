@@ -21,6 +21,7 @@
 #
 # Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2019, Joyent, Inc.
+# Copyright 2018 RackTop Systems.
 #
 
 LIBRARY = libtopo.a
@@ -90,6 +91,9 @@ LINTFLAGS64 = -msux -m64
 $(DYNLIB)  := LDLIBS += \
 	-lnvpair -lelf -lumem -lxml2 -lkstat -luuid -ldevinfo \
 	-lsmbios -lc -ldevid -lipmi -lscf -lpcidb
+
+# Allow libxml2 to be taken from the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 $(LINTLIB) := SRCS = $(SRCDIR)/$(LINTSRC)
 $(LINTLIB) := LINTFLAGS = -nsvx

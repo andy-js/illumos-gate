@@ -20,6 +20,7 @@
 #
 #
 # Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 #
 # Copyright (c) 2018, Joyent, Inc.
 
@@ -43,6 +44,7 @@ LIBS =		$(DYNLIB) $(LINTLIB)
 $(NOT_NATIVE)NATIVE_BUILD = $(POUND_SIGN)
 $(NATIVE_BUILD)VERS =
 $(NATIVE_BUILD)LIBS = $(DYNLIB)
+$(NATIVE_BUILD)$(DYNLIB) := ZASSERTDEFLIB=
 
 LDLIBS_i386 += -lsmbios
 LDLIBS +=	-luutil -lc -lgen -lnvpair

@@ -21,7 +21,9 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 LIBRARY=	kmf_openssl.a
 VERS=		.1
@@ -41,6 +43,9 @@ OPENSSLLIBS64=	$(BERLIB64) -lcrypto -lcryptoutil -lc
 
 LINTSSLLIBS	= $(BERLIB) -lcrypto -lcryptoutil -lc
 LINTSSLLIBS64	= $(BERLIB64) -lcrypto -lcryptoutil -lc
+
+# Allow libcrypto to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libcrypto.so
 
 # Because of varying openssl implementations, we need to not have lint
 # complain if we're being liberal in our suppression directives.

@@ -22,7 +22,9 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 LIBRARY= libldap.a
 VERS= .5
@@ -84,6 +86,9 @@ SRCS=		$(BEROBJS:%.o=../sources/ldap/ber/%.c) \
 LIBS =		$(DYNLIB) $(LINTLIB)
 DYNFLAGS +=	$(ZNODELETE)
 
+# Allow the NSS libraries to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(NSS_LIBS:-l%=$(ZASSERTDEFLIB)=lib%.so)
+
 CPPFLAGS=	$(COM_INC) $(CPPFLAGS.master)
 
 # definitions for lint
@@ -124,7 +129,17 @@ CERRWARN +=	-_gcc=-Wno-address
 # not linted
 SMATCH=off
 
-LDLIBS +=	-lsasl -lsocket -lnsl -lmd -lc
+# Override the default linker path so that libraries found in the host
+# directories will trigger the -zassert-deflib logic.
+LDLIBS32 +=	-YP,$(DEFLDPATH):$(NSS_LDPATH)
+LDLIBS64 +=	-YP,$(DEFLDPATH64):$(NSS_LDPATH64)
+
+# Only add -L options for the NSS directories if ADJUNCT_PROTO is being
+# used because it disables the -zassert-deflib logic.
+$(ADJUNCT_PROTO_SET)LDLIBS32 +=	-L$(NSS_LDPATH)
+$(ADJUNCT_PROTO_SET)LDLIBS64 +=	-L$(NSS_LDPATH64)
+
+LDLIBS +=	-lsasl -lsocket -lnsl -lmd -lc $(NSS_LIBS)
 
 .KEEP_STATE:
 

@@ -22,6 +22,7 @@
 # Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 # Copyright (c) 2018, Joyent, Inc.
+# Copyright 2018 RackTop Systems.
 #
 
 LIBRARY =	ioctl.a
@@ -56,6 +57,10 @@ CPPFLAGS +=	-I../../../common/zfs
 
 # needs work
 SMOFF += all_func_returns
+
+# Allow libpython to be taken from outside of the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += \
+	$(ZASSERTDEFLIB)=libpython$(PYTHON_VERSION).so
 
 .KEEP_STATE:
 

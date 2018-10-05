@@ -22,6 +22,7 @@
 
 /*
  * Copyright 2018, Richard Lowe.
+ * Copyright 2018 RackTop Systems.
  */
 /*
  * Copyright 2010 Sun Microsystems, Inc.  All rights reserved.
@@ -39,7 +40,7 @@
  */
 
 /* If you modify this file, you must increment CW_VERSION */
-#define	CW_VERSION	"5.0"
+#define	CW_VERSION	"6.0"
 
 /*
  * -#		Verbose mode
@@ -1210,6 +1211,22 @@ do_gcc(cw_ictx_t *ctx)
 			/* Just ignore -YS,... for now */
 			if (strncmp(arg, "S,", 2) == 0)
 				break;
+			/* Reformat -YP or GCC will moan */
+			if (strncmp(arg, "P,", 2) == 0) {
+				char *s;
+				(void) asprintf(&s, "-Y%s", arg);
+				newae(ctx->i_ae, s);
+				free(s);
+				break;
+			}
+			if (strncmp(arg, "l,", 2) == 0) {
+				char *s = strdup(arg);
+				s[0] = '-';
+				s[1] = 'B';
+				newae(ctx->i_ae, s);
+				free(s);
+				break;
+			}
 			if (strncmp(arg, "I,", 2) == 0) {
 				char *s = strdup(arg);
 				s[0] = '-';

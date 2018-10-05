@@ -22,6 +22,7 @@
 #
 # Copyright (c) 2004, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2018, Joyent, Inc.
+# Copyright 2018 RackTop Systems.
 #
 
 MYPROG =	svccfg
@@ -92,6 +93,9 @@ CLOBBERFILES += svccfg_lex.c svccfg_grammar.c svccfg_grammar.h \
 
 SVCCFG_EXTRA_LIBS = -lxml2 -lscf -ll -luutil -lumem -lmd5 -lnvpair
 $(NOT_NATIVE)SVCCFG_EXTRA_LIBS += -ltecla
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 LIBSCF		= $(SRC)/lib/libscf
 LIBTECLA	= $(SRC)/lib/libtecla		# just for the header

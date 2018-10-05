@@ -22,6 +22,8 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 
 LIBRARY = libfmd_snmp.a
 VERS = .1
@@ -54,6 +56,11 @@ CFLAGS64 += $(CCVERBOSE) $(C_BIGPICFLAGS)
 # No lint libraries are delivered for Net-SNMP yet
 SNMPLIBS = -lnetsnmp -lnetsnmphelpers -lnetsnmpagent
 lint := SNMPLIBS=
+
+# Allow Net-SNMP libs to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libnetsnmp.so
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libnetsnmphelpers.so
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libnetsnmpagent.so
 
 LDLIBS += $(MACH_LDLIBS)
 LDLIBS += -lfmd_adm -luutil -lnvpair -ltopo

@@ -21,7 +21,9 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 PROG =		wpad
 MANIFEST =	wpa.xml
@@ -39,6 +41,9 @@ all install := LDLIBS += -lcrypto
 LINTFLAGS += 	-u
 
 SMOFF += all_func_returns
+
+# Allow libcrypto to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libcrypto.so
 
 .KEEP_STATE:
 

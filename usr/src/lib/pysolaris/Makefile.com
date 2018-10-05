@@ -20,6 +20,7 @@
 #
 #
 # Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
 #
 
@@ -49,7 +50,13 @@ CERRWARN +=	-_gcc=-Wno-unused-variable
 CPPFLAGS +=	\
 	-I$(ADJUNCT_PROTO)/usr/include/python$(PYVER)$(PYSUFFIX)
 
-all:
+# Allow libpython to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += \
+	$(ZASSERTDEFLIB)=libpython$(PYTHON_VERSION).so
+
+.KEEP_STATE:
+
+all: $(PYOBJS) $(LIBS)
 
 .KEEP_STATE:
 

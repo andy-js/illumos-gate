@@ -23,6 +23,7 @@
 # Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2012 OmniTI Computer Consulting, Inc.  All rights reserved.
 # Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2018 RackTop Systems.
 #
 
 LIBRARY =	libbe_py.a
@@ -45,6 +46,10 @@ LDLIBS +=	-lbe -lnvpair -lc
 CFLAGS +=	$(CCVERBOSE)
 CPPFLAGS +=	-D_FILE_OFFSET_BITS=64 -I../../libbe/common \
 	-I$(ADJUNCT_PROTO)/usr/include/python$(PYVER)$(PYSUFFIX)
+
+# Allow libpython to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)$(DYNLIB) := DYNFLAGS += \
+	$(ZASSERTDEFLIB)=libpython$(PYTHON_VERSION).so
 
 .KEEP_STATE:
 

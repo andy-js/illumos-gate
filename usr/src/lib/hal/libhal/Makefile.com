@@ -22,6 +22,8 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 #
 # usr/src/lib/hal/libhal/Makefile.com
 #
@@ -38,6 +40,9 @@ include ../../Makefile.com
 LIBS =		$(DYNLIB) $(LINTLIB)
 LDLIBS +=	-lc -ldbus-1
 $(LINTLIB) := 	SRCS = $(SRCDIR)/$(LINTSRC)
+
+# Allow libdbus to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libdbus-1.so
 
 SRCDIR =	../common
 

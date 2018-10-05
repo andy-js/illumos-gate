@@ -22,6 +22,7 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 #
 
 PROG =		hald-probe-network-printer
@@ -35,6 +36,10 @@ ROOTCMDDIR =	$(ROOTLIB_HAL)
 
 LDLIBS +=	-lc -ldbus-1 -lhal
 LDLIBS +=	$(ZIGNORE) -lnetsnmp
+
+# Allow libdbus and libnetsnmp to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libdbus-1.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libnetsnmp.so
 
 CPPFLAGS +=	$(HAL_DBUS_CPPFLAGS) $(HAL_CONFIG_CPPFLAGS)
 CPPFLAGS +=	-I$(ROOT)/usr/include/hal -I../../utils -I../../hald

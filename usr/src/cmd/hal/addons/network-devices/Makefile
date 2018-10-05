@@ -22,6 +22,8 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 #
 
 PROG =		hald-addon-network-discovery
@@ -42,6 +44,12 @@ ROOTCMDDIR =	$(ROOTLIB_HAL)
 LDLIBS +=	-lc -ldbus-1 -lhal -lglib-2.0 -ldbus-glib-1
 LDLIBS +=	-lnsl -lsocket
 LDLIBS +=	$(ZIGNORE) -lnetsnmp
+
+# Allow HAL to take some of it dependencies from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libdbus-1.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libglib-2.0.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libdbus-glib-1.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libnetsnmp.so
 
 CPPFLAGS +=	$(HAL_DBUS_CPPFLAGS) $(HAL_GLIB_CPPFLAGS) $(HAL_CONFIG_CPPFLAGS)
 CPPFLAGS +=	-I$(ROOT)/usr/include/hal -I../../hald -I../../utils

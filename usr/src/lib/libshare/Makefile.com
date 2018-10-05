@@ -20,6 +20,7 @@
 #
 # Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2016 by Delphix. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
 #
 LIBRARY =	libshare.a
@@ -41,6 +42,9 @@ lintcheck := SRCS = $(LIBSRCS)
 LIBS =		$(DYNLIB) $(LINTLIB)
 LDLIBS +=	-lc -lnsl -lscf -lzfs -luuid -lxml2 -lnvpair
 $(LINTLIB) :=	SRCS = $(SRCDIR)/$(LINTSRC)
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 #add nfs/lib directory as part of the include path
 CFLAGS +=	$(CCVERBOSE)

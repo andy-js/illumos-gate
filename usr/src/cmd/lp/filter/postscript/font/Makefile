@@ -20,10 +20,10 @@
 # CDDL HEADER END
 #
 #
-# ident	"%Z%%M%	%I%	%E% SMI"
-#
 # Copyright 1989-2002 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
+#
+# Copyright 2018 RackTop Systems.
 #
 # cmd/lp/filter/postscript/font/Makefile
 #
@@ -51,6 +51,7 @@ NATIVEPROG =		$(NATIVEDIR)/$(PROG)
 $(NATIVEPROG) :=	CC=$(NATIVECC)
 $(NATIVEPROG) :=	LDLIBS=
 $(NATIVEPROG) :=	CPPFLAGS.master=
+$(NATIVEPROG) :=	ZASSERTDEFLIB=
 
 .KEEP_STATE:
 

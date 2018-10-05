@@ -22,7 +22,9 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 PROG= cdrw
 
@@ -45,6 +47,9 @@ LINTFLAGS += 	-um
 
 # not linted
 SMATCH=off
+
+# Allow libdbus to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libdbus-1.so
 
 $(ROOTBIN)/cdrw := FILEMODE = 04755
 

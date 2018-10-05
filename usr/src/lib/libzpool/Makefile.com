@@ -21,6 +21,7 @@
 #
 # Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2013, 2016 by Delphix. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright 2019, Joyent, Inc.
 #
 
@@ -76,6 +77,9 @@ CPPFLAGS +=	$(INCS)	-DDEBUG -D_FAKE_KERNEL
 
 LINTFLAGS +=	-erroff=E_STATIC_UNUSED $(INCS)
 LINTFLAGS64 +=	-erroff=E_STATIC_UNUSED $(INCS)
+
+# Allow zlib to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libz.so
 
 CERRWARN +=	-_gcc=-Wno-parentheses
 CERRWARN +=	-_gcc=-Wno-switch

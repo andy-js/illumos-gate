@@ -20,6 +20,7 @@
 #
 # Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2018, Joyent, Inc.
+# Copyright 2018 RackTop Systems.
 #
 
 LIBRARY= libkmf.a
@@ -63,6 +64,9 @@ LDLIBS	+=	-lcustr
 # DYNLIB libraries do not have lint libs and are not linted
 $(DYNLIB) :=    LDLIBS += -lxml2
 $(DYNLIB64) :=  LDLIBS64 += -lxml2
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 CPPFLAGS	+=	-I$(INCDIR) -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
 			-I../../ber_der/inc -I$(SRCDIR)

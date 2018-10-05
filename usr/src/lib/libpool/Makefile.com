@@ -22,7 +22,9 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 LIBRARY =	libpool.a
 VERS =		.1
@@ -41,6 +43,9 @@ include ../../Makefile.lib
 # Adding -lxml2 to LDLIBS would cause lint to complain as there is no .ln file
 # for libxml2, so add it to DYNFLAGS
 DYNFLAGS +=	-lxml2
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 LIBS =		$(DYNLIB) $(LINTLIB)
 LDLIBS +=	-lscf -lnvpair -lexacct -lc

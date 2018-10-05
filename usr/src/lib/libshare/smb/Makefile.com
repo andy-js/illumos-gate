@@ -23,6 +23,7 @@
 # Use is subject to license terms.
 #
 # Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2018 RackTop Systems.
 #
 # Copyright (c) 2018, Joyent, Inc.
 
@@ -47,6 +48,9 @@ lintcheck := SRCS = $(LIBSRCS)
 
 LIBS =		$(DYNLIB)
 LDLIBS +=	-lshare -lscf -luuid -ldlpi -lnsl -lnvpair -lxml2 -lumem -lc
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 CFLAGS +=	$(CCVERBOSE)
 CERRWARN +=	-_gcc=-Wno-char-subscripts

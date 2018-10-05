@@ -20,6 +20,7 @@
 #
 #
 # Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 #
 # Definitions common to command source.
 #
@@ -119,7 +120,8 @@ LDLIBS =	$(LDLIBS.cmd)
 
 LDFLAGS.cmd = \
 	$(BDIRECT) $(ENVLDFLAGS1) $(ENVLDFLAGS2) $(ENVLDFLAGS3) \
-	$(MAPFILE.NES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%)
+	$(MAPFILE.NES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%) \
+	$(ZASSERTDEFLIB)
 
 LDFLAGS =	$(LDFLAGS.cmd)
 

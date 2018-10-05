@@ -12,6 +12,7 @@
 #
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2015 Nexenta Systems, Inc.  All rights reserved.
+# Copyright 2018 RackTop Systems.
 #
 
 include		$(SRC)/cmd/Makefile.cmd
@@ -29,5 +30,8 @@ clean:
 		$(RM) $(OBJS)
 
 install:	all $(ROOTPROG)
+
+# Allow zlib to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libz.so
 
 include		$(SRC)/cmd/Makefile.targ

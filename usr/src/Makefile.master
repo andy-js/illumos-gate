@@ -28,6 +28,7 @@
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
 # Copyright 2016 Toomas Soome <tsoome@me.com>
 # Copyright 2018 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2018 RackTop Systems.
 # Copyright 2019, Joyent, Inc.
 # Copyright 2019 RackTop Systems.
 #
@@ -101,6 +102,12 @@ INTEL_BLD=      $(INTEL_BLD_1:i386=)
 __SUNC=			$(POUND_SIGN)
 $(__SUNC)__GNUC=	$(POUND_SIGN)
 __GNUC64=		$(__GNUC)
+
+# If ADJUNCT_PROTO was set we set ADJUNCT_PROTO_NOT_SET to POUND_SIGN so
+# we can use it to turn off the -zassert-deflib exceptions that allow
+# linking against host libraries.
+ADJUNCT_PROTO_NOT_SET=		$(ADJUNCT_PROTO:%=$(POUND_SIGN))
+$(ADJUNCT_PROTO_NOT_SET)ADJUNCT_PROTO_SET=	$(POUND_SIGN)
 
 # Allow build-time "configuration" to enable or disable some things.
 # The default is POUND_SIGN, meaning "not enabled". If the environment
@@ -766,11 +773,6 @@ MAPFILE.INT =		mapfile-intf
 # LDLIBS32 and LDLIBS64 can be set in the environment to override the following
 # assignments.
 #
-# These environment settings make sure that no libraries are searched outside
-# of the local workspace proto area:
-#	LDLIBS32=-YP,$ROOT/lib:$ROOT/usr/lib
-#	LDLIBS64=-YP,$ROOT/lib/$MACH64:$ROOT/usr/lib/$MACH64
-#
 LDLIBS32 =	$(ENVLDLIBS1) $(ENVLDLIBS2) $(ENVLDLIBS3)
 LDLIBS32 +=	$(ADJUNCT_PROTO:%=-L%/usr/lib -L%/lib)
 LDLIBS.cmd =	$(LDLIBS32)
@@ -780,6 +782,12 @@ LDLIBS64 =	$(ENVLDLIBS1:%=%/$(MACH64)) \
 		$(ENVLDLIBS2:%=%/$(MACH64)) \
 		$(ENVLDLIBS3:%=%/$(MACH64))
 LDLIBS64 +=     $(ADJUNCT_PROTO:%=-L%/usr/lib/$(MACH64) -L%/lib/$(MACH64))
+
+#
+# Defines to be used when overriding the default search path with -YP.
+#
+DEFLDPATH =	/lib:/usr/lib
+DEFLDPATH64 =	/lib/64:/usr/lib/64
 
 #
 # Define compilation macros.
@@ -980,6 +988,7 @@ ZRECORD=	-zrecord
 ZREDLOCSYM=	-zredlocsym
 ZTEXT=		-ztext
 ZVERBOSE=	-zverbose
+ZASSERTDEFLIB=	-zassert-deflib
 
 GSHARED=	-G
 CCMT=		-mt

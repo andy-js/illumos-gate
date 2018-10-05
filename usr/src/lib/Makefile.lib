@@ -23,6 +23,7 @@
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
 # Copyright 2016 RackTop Systems.
 # Copyright (c) 1989, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright 2019, Joyent, Inc.
 #
 #
@@ -126,7 +127,7 @@ SONAME=		$(DYNLIB)
 
 
 HSONAME=	-h$(SONAME)
-DYNFLAGS=	$(HSONAME) $(ZTEXT) $(ZDEFS) $(BDIRECT) \
+DYNFLAGS=	$(HSONAME) $(ZTEXT) $(ZDEFS) $(ZASSERTDEFLIB) $(BDIRECT) \
 		$(MAPFILES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%)
 
 LDLIBS=		$(LDLIBS.lib)
@@ -205,7 +206,7 @@ HSONAMECCC=	-h $(SONAMECCC)
 #
 # Keep in sync with the standard DYNFLAGS
 #
-$(DYNLIBCCC):=	DYNFLAGS = $(HSONAMECCC) $(ZTEXT) $(ZDEFS) \
+$(DYNLIBCCC):=	DYNFLAGS = $(HSONAMECCC) $(ZTEXT) $(ZDEFS) $(ZASSERTDEFLIB) \
 		$(MAPFILES:%=-M%) $(MAPFILE.PGA:%=-M%) $(MAPFILE.NED:%=-M%) \
 		$(BDIRECT) $(NORUNPATH)
 

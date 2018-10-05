@@ -22,6 +22,8 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 
 LIBRARY=	libbrand.a
 VERS=		.1
@@ -35,6 +37,9 @@ LDLIBS +=	-lc
 $(LINTLIB) := SRCS=	$(SRCDIR)/$(LINTSRC)
 CPPFLAGS +=	-I$(ADJUNCT_PROTO)/usr/include/libxml2 -I$(SRCDIR) -D_REENTRANT
 $(DYNLIB) :=	LDLIBS += -lxml2
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 SRCDIR=		../common
 

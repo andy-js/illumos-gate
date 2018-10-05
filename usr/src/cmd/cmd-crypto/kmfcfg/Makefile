@@ -22,6 +22,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 # Makefile for policy testing code
 #
 
@@ -51,6 +53,9 @@ CPPFLAGS	+= -I$(ADJUNCT_PROTO)/usr/include/libxml2 \
 		-I$(KMFDIR)/include -I.
 LDLIBS		+= -L$(ROOT)/usr/lib -lkmf -lcryptoutil
 XMLLIB		= -lxml2
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS	+= $(ZASSERTDEFLIB)=libxml2.so
 
 .KEEP_STATE:
 

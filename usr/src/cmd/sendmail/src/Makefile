@@ -25,6 +25,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 # cmd/sendmail/src/Makefile
 #
 
@@ -47,6 +49,10 @@ LDFLAGS +=	$(MAPFILES:%=-M%)
 LDLIBS += 	../libsmutil/libsmutil.a ../libsm/libsm.a -lresolv -lsocket \
 		-lnsl ../db/libdb.a -lldap -lsldap -lwrap -lumem \
 		-lssl -lcrypto -lsasl
+
+# Allow libssl and libcrypto to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libssl.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libcrypto.so
 
 INCPATH=	-I. -I../include -I../db
 

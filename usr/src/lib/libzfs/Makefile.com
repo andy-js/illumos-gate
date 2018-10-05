@@ -22,6 +22,7 @@
 # Copyright (c) 2005, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2016 Igor Kozhukhov <ikozhukhov@gmail.com>
 # Copyright (c) 2011, 2017 by Delphix. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright 2019 Joyent, Inc.
 #
 
@@ -83,6 +84,9 @@ SMATCH=off
 
 # There's no lint library for zlib, so only include this when building
 $(DYNLIB) := LDLIBS +=	-lz
+
+# Allow zlib to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libz.so
 
 LINTFLAGS +=	-erroff=E_STATIC_UNUSED
 LINTFLAGS64 +=	-erroff=E_STATIC_UNUSED

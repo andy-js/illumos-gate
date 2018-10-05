@@ -22,6 +22,7 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
 #
 
@@ -33,6 +34,9 @@ include ../Makefile.cmd
 include $(SRC)/lib/policykit/Makefile.policykit
 
 LDLIBS +=	-lpolkit $(POLICYKIT_GLIB_LDLIBS)
+
+# Allow libglib to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libglib-2.0.so
 
 CPPFLAGS +=	-I$(ROOT)/usr/include/libpolkit
 CPPFLAGS +=	$(POLICYKIT_DBUS_CPPFLAGS) $(POLICYKIT_GLIB_CPPFLAGS)

@@ -22,7 +22,9 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 PROG = isnsadm
 SRCS = cmdparse.c isnsadm.c isnsadm_msg.c
@@ -35,6 +37,9 @@ CFLAGS += $(CCVERBOSE)
 CPPFLAGS += -I. -I$(ADJUNCT_PROTO)/usr/include/libxml2 -I../isnsd
 POFILE = isnsadm_all.po
 POFILES = $(OBJS:%.o=%.po)
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libxml2.so
 
 LINTFLAGS += -xerroff=E_BAD_FORMAT_STR2
 

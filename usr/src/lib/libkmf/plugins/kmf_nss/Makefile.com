@@ -22,7 +22,9 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 LIBRARY=	kmf_nss.a
 VERS=		.1
@@ -32,15 +34,29 @@ OBJECTS=	nss_spi.o
 include	$(SRC)/lib/Makefile.lib
 
 MPSDIR=		/usr/lib/mps
+MPSDIR64=	$(MPSDIR)/64
 KMFINC=		-I../../../include -I../../../ber_der/inc
 NSSINC=		-I$(ADJUNCT_PROTO)/usr/include/mps
 BERLIB=		-lkmf -lkmfberder
 BERLIB64=	$(BERLIB)
 
-NSSLIBS=	$(BERLIB) -L$(ADJUNCT_PROTO)$(MPSDIR) -R$(MPSDIR) \
-		-lnss3 -lnspr4 -lsmime3 -lc
-NSSLIBS64=	$(BERLIB64) -L$(ADJUNCT_PROTO)$(MPSDIR)/$(MACH64) \
-		-R$(MPSDIR)/$(MACH64) -lnss3 -lnspr4 -lsmime3 -lc
+NSSLIBS=	$(BERLIB) -R$(MPSDIR) -lnss3 -lnspr4 -lsmime3 -lc
+NSSLIBS64=	$(BERLIB64) -R$(MPSDIR64) -lnss3 -lnspr4 -lsmime3 -lc
+
+# Allow NSS libraries to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libnss3.so
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libnspr4.so
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libsmime3.so
+
+# Override the default linker path so that libraries found in the host
+# directories will trigger -zassert-deflib logic.
+LDLIBS32	+= -YP,$(DEFLDPATH):$(MPSDIR)
+LDLIBS64	+= -YP,$(DEFLDPATH64):$(MPSDIR64)
+
+# Only add -L options for the NSS directories if ADJUNCT_PROTO is being
+# used because it disables the -zassert-deflib logic.
+$(ADJUNCT_PROTO_SET)LDLIBS32	+= -L$(ADJUNCT_PROTO)$(MPSDIR)
+$(ADJUNCT_PROTO_SET)LDLIBS64	+= -L$(ADJUNCT_PROTO)$(MPSDIR64)
 
 SRCDIR=		../common
 INCDIR=		../../include

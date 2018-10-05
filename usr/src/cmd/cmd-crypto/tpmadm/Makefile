@@ -21,6 +21,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 
 PROG =	tpmadm
 
@@ -37,6 +39,9 @@ MSGFILES=$(SRCS:%.c=%.i)
 CPPFLAGS += -xCC
 LINTFLAGS += -XCC  -L$(ADJUNCT_PROTO)/usr/lib
 LDLIBS += -ltspi -luuid
+
+# Allow trousers libs to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libtspi.so
 
 CLOBBERFILES = C.ln $(POFILE) $(POFILES)
 

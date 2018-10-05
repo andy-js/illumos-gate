@@ -10,6 +10,7 @@
 #
 
 # Copyright 2015, Richard Lowe.
+# Copyright 2018 RackTop Systems.
 
 include $(SRC)/tools/Makefile.tools
 
@@ -41,5 +42,8 @@ $(ROOTONBLDLIBMACH64)/%: %
 # We can't create CTF in the tools build because of a bootstrap bug with the new CTF
 $(DYNLIB) := CTFMERGE_POST= :
 CTFCONVERT_O= :
+
+# Disable -zassert-deflib.  We want to link against host libraries.
+$(DYNLIB) := ZASSERTDEFLIB=
 
 include $(SRC)/lib/Makefile.targ

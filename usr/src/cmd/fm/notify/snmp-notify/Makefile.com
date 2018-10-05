@@ -21,6 +21,7 @@
 
 #
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 #
 
 .KEEP_STATE:
@@ -49,6 +50,10 @@ LDLIBS += -L$(ROOT)/usr/lib/fm -lnvpair -lfmevent -lfmd_msg -lfmnotify \
 	-lumem -lnetsnmp -lnetsnmpagent
 LDFLAGS += -R/usr/lib/fm
 LINTFLAGS += -mnu
+
+# Allow Net-SNMP libs to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libnetsnmp.so
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS += $(ZASSERTDEFLIB)=libnetsnmpagent.so
 
 CERRWARN += -_gcc=-Wno-parentheses
 

@@ -5,6 +5,8 @@
 # Copyright 2011, Richard Lowe.
 #
 # Copyright (c) 2018, Joyent, Inc.
+# Copyright 2018 RackTop Systems.
+#
 
 include ../../Makefile.ctf
 
@@ -103,6 +105,9 @@ FRC:
 # depond upon it, and so aren't built yet.
 $(DYNLIB) := CTFMERGE_POST= :
 CTFCONVERT_O= :
+
+# Disable -zassert-deflib.  We want to link against host libraries.
+$(DYNLIB) := ZASSERTDEFLIB=
 
 include $(SRC)/lib/Makefile.targ
 

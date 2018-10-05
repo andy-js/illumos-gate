@@ -22,7 +22,9 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
+#
 
 LIBRARY= pkinit.a
 VERS= .1
@@ -74,6 +76,9 @@ SMATCH=off
 CFLAGS +=	$(CCVERBOSE) -I..
 DYNFLAGS +=	$(KRUNPATH) $(KMECHLIB) -znodelete
 LDLIBS +=	-L $(ROOTLIBDIR) -lcrypto -lc
+
+# Allow libcrypto to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libcrypto.so
 
 ROOTLIBDIR= $(ROOT)/usr/lib/krb5/plugins/preauth
 

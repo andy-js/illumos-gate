@@ -25,6 +25,7 @@
 
 #
 # Copyright (c) 2012 by Delphix. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright (c) 2018, Joyent, Inc.
 #
 
@@ -73,6 +74,9 @@ obj.o := CERRWARN += -erroff=E_CONST_OBJ_SHOULD_HAVE_INITIZR
 obj.o := CERRWARN += -erroff=E_IMPLICIT_DECL_FUNC_RETURN_INT
 
 LDLIBS		+= -lsecdb -lsocket -lnsl -lscf -lxml2
+
+# Allow libxml2 to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)LDFLAGS	+= $(ZASSERTDEFLIB)=libxml2.so
 
 .KEEP_STATE:
 

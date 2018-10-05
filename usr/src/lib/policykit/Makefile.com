@@ -22,6 +22,8 @@
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 
 include $(SRC)/lib/Makefile.lib
 include $(SRC)/lib/policykit/Makefile.policykit
@@ -32,6 +34,10 @@ CERRWARN +=	-_gcc=-Wno-unused-variable
 CERRWARN +=	-_gcc=-Wno-unused-function
 
 CSTD =	$(CSTD_GNU99)
+
+# Allow libdbus and libglib to be taken from outside the proto area.
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libdbus-1.so
+$(ADJUNCT_PROTO_NOT_SET)DYNFLAGS += $(ZASSERTDEFLIB)=libglib-2.0.so
 
 ROOTLIBPCDIR =	$(ROOT)/usr/lib/pkgconfig
 ROOTLIBPC =	$(LIBPCSRC:%=$(ROOTLIBPCDIR)/%)
