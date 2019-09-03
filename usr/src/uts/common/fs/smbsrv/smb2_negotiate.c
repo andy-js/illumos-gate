@@ -244,15 +244,34 @@ smb2_newrq_negotiate(smb_request_t *sr)
 	if (struct_size != 36 || version_cnt > 8)
 		return (-1);
 
-	/*
-	 * Decode SMB2 Negotiate (variable part)
-	 */
-	rc = smb_mbc_decodef(&sr->command,
-	    "#w", version_cnt, cl_versions);
-	if (rc != 0)
-		return (rc);
+	sr->smb2_hdr_flags = SMB2_FLAGS_SERVER_TO_REDIR;
 
 	DTRACE_SMB2_START(op__Negotiate, smb_request_t *, sr);
+
+	/*
+	 * [MS-SMB2] 3.3.5.4 Receiving an SMB2 NEGOTIATE Request
+	 * "If the DialectCount of the SMB2 NEGOTIATE Request is 0, the
+	 * server MUST fail the request with STATUS_INVALID_PARAMETER."
+	 */
+	if (version_cnt == 0) {
+		cmn_err(CE_NOTE, "clnt %s no dialects offered",
+		    sr->session->ip_addr_str);
+		smb2sr_put_error(sr, NT_STATUS_INVALID_PARAMETER);
+		goto errout;
+	}
+
+	/*
+	 * Decode SMB2 Negotiate (variable part).  Note: rc was
+	 * intentionally left set as we want the connection to be
+	 * closed if the request we received was malformed.
+	 */
+	rc = smb_mbc_decodef(&sr->command, "#w", version_cnt, cl_versions);
+	if (rc != 0) {
+		cmn_err(CE_NOTE, "clnt %s dialects malformed",
+		    sr->session->ip_addr_str);
+		smb2sr_put_error(sr, NT_STATUS_INVALID_PARAMETER);
+		goto errout;
+	}
 
 	/*
 	 * The client offers an array of protocol versions it
@@ -263,8 +282,7 @@ smb2_newrq_negotiate(smb_request_t *sr)
 	if (best_version == 0) {
 		cmn_err(CE_NOTE, "clnt %s no supported dialect",
 		    sr->session->ip_addr_str);
-		sr->smb2_status = NT_STATUS_INVALID_PARAMETER;
-		rc = -1;
+		smb2sr_put_error(sr, NT_STATUS_NOT_SUPPORTED);
 		goto errout;
 	}
 	s->dialect = best_version;
@@ -276,6 +294,8 @@ smb2_newrq_negotiate(smb_request_t *sr)
 	rc = smb2_negotiate_common(sr, best_version);
 
 errout:
+	(void) smb2_encode_header(sr, B_FALSE);
+
 	/* sr->smb2_status was set */
 	DTRACE_SMB2_DONE(op__Negotiate, smb_request_t *, sr);
 
@@ -337,8 +357,6 @@ smb2_negotiate_common(smb_request_t *sr, uint16_t version)
 	/*
 	 * SMB2 negotiate reply
 	 */
-	sr->smb2_hdr_flags = SMB2_FLAGS_SERVER_TO_REDIR;
-	(void) smb2_encode_header(sr, B_FALSE);
 	if (sr->smb2_status != 0) {
 		smb2sr_put_error(sr, sr->smb2_status);
 		/* smb2_send_reply(sr); in caller */
