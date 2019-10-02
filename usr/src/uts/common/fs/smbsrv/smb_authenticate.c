@@ -21,6 +21,7 @@
 /*
  * Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2018 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2019 RackTop Systems.
  */
 
 /*
@@ -269,6 +270,36 @@ smb_authenticate_ext(smb_request_t *sr)
 			/* Intentionally leave smb2_ssnid=0 for SMB1 */
 			sr->smb_uid = user->u_uid;
 		}
+
+		/*
+		 * Open a connection to the local logon service.
+		 * If we can't, it may be busy, or not running.
+		 * Don't log here - this may be frequent.
+		 */
+		if ((status = smb_authsock_open(sr)) != 0)
+			goto errout;
+
+		/*
+		 * Tell the auth. svc who this client is.
+		 */
+		if ((status = smb_auth_do_clinfo(sr)) != 0)
+			goto errout;
+
+		msg_hdr.lmh_msgtype = LSA_MTYPE_ESFIRST;
+	} else if (sr->smb2_ssnid != 0 &&
+	    (user = smb_session_lookup_ssnid(sr->session,
+	    sr->smb2_ssnid)) != NULL) {
+		/*
+		 * We found a user in LOGGED_ON state for this
+		 * ssnid which means this is a reauthentication.
+		 * Put the user back into LOGGING_ON state.
+		 */
+		mutex_enter(&user->u_mutex);
+		user->u_state = SMB_USER_STATE_LOGGING_ON;
+		mutex_exit(&user->u_mutex);
+
+		/* user cleanup in smb_request_free */
+		sr->uid_user = user;
 
 		/*
 		 * Open a connection to the local logon service.
@@ -594,6 +625,8 @@ smb_authsock_sendrecv(smb_request_t *sr, smb_lsa_msg_hdr_t *hdr,
 	uint32_t status;
 	int rc;
 
+	ASSERT(user != NULL);
+
 	/*
 	 * Get a hold on the auth socket.
 	 */
@@ -701,6 +734,8 @@ smb_authsock_open(smb_request_t *sr)
 	ksocket_t so = NULL;
 	uint32_t status = 0;
 	int rc;
+
+	ASSERT(user != NULL);
 
 	/*
 	 * If the auth. service is busy, wait our turn.  This threshold
