@@ -24,6 +24,7 @@ CDDL HEADER END
 Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
 Copyright 2018 Nexenta Systems, Inc.  All rights reserved.
 Copyright 2016 Hans Rosenfeld <rosenfeld@grumpf.hope-2000.org>
+Copyright 2019 RackTop Systems.
 
 NOTE:  This service manifest is not editable; its contents will
 be overwritten by package or patch operations, including
@@ -234,9 +235,9 @@ file.
 		<propval name='encrypt' type='astring'
 			value='disabled' override='true'/>
 		<propval name='initial_credits' type='integer'
-			value='20' override='true'/>
+			value='512' override='true'/>
 		<propval name='maximum_credits' type='integer'
-			value='1000' override='true'/>
+			value='8192' override='true'/>
 	</property_group>
 
 	<!-- SMB service-specific shares exec configuration defaults -->
