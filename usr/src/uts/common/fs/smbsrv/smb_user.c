@@ -22,6 +22,7 @@
  * Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2018 Nexenta Systems, Inc. All rights reserved.
  * Copyright (c) 2016 by Delphix. All rights reserved.
+ * Copyright 2019 RackTop Systems.
  */
 
 /*
@@ -674,7 +675,6 @@ smb_user_delete(void *arg)
 
 	if (ucount == 0) {
 		smb_rwx_rwenter(&session->s_lock, RW_WRITER);
-		session->s_state = SMB_SESSION_STATE_SHUTDOWN;
 		smb_rwx_cvbcast(&session->s_lock);
 		smb_rwx_rwexit(&session->s_lock);
 	}
