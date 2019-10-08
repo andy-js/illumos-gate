@@ -11,6 +11,7 @@
 
 /*
  * Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2019 RackTop Systems.
  */
 
 
@@ -889,6 +890,7 @@ cmd_start:
 	 * Credit adjustments (increase)
 	 */
 	if (!sr->smb2_async) {
+		sr->smb2_credit_response = sr->smb2_credit_request;
 		if (sr->smb2_credit_request > sr->smb2_credit_charge) {
 			smb2_credit_increase(sr);
 		}
