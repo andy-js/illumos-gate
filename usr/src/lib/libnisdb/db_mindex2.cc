@@ -21,6 +21,8 @@
 /*
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2019 RackTop Systems.
  */
 
 #include <stdio.h>
@@ -726,13 +728,12 @@ findDirEntryMapping(__nis_table_mapping_t *t, entry_object *e, char **name) {
 int
 db_mindex::queryLDAP(db_query *qin, char *dbId, int doAsynch) {
 	__nis_table_mapping_t	*t;
-	int			i, na, nq = 0, stat, stat2, numAttrs, ret;
+	int			i, na, stat, stat2, ret;
 	int			xid = 0;
 	long			numEa;
-	bool_t			asObj, doEnum;
+	bool_t			asObj;
 	db_query		*q;
 	entry_object		**ea;
-	nis_attr		attr;
 	nis_object		*dirObj;
 	db_status		dstat;
 	const char		*myself = "db_mindex::queryLDAP";
@@ -790,8 +791,6 @@ db_mindex::queryLDAP(db_query *qin, char *dbId, int doAsynch) {
 	/* Is the object a directory ? */
 	if (asObj) {
 		nis_object	*o;
-		entry_object	*e, eo;
-		entry_col	ec[2];
 		int		nea;
 
 		stat = objFromLDAP(t, &o, &ea, &nea);
@@ -1168,7 +1167,7 @@ db_mindex::removeLDAP(db_query *qin, nis_object *obj) {
  */
 int
 db_mindex::storeObjLDAP(__nis_table_mapping_t *t, nis_object *o) {
-	int		stat, assigned = 0;
+	int		stat;
 	entry_object	**ea;
 	int		numEa, doUnlock = 0;
 	db		*dbase = 0;
@@ -1284,7 +1283,7 @@ db_mindex::storeLDAP(db_query *qin, entry_object *obj, nis_object *o,
 			entry_obj *oldObj, char *dbId) {
 	__nis_table_mapping_t	*t;
 	bool_t			asObj;
-	db_query		*q, *qo, **qa;
+	db_query		*q, **qa;
 	__nis_rule_value_t	*rv = 0;
 	int			stat;
 	const char		*myself = "db_mindex::storeLDAP";
@@ -1432,7 +1431,7 @@ db_mindex::storeLDAP(db_query *qin, entry_object *obj, nis_object *o,
 	if (qin != NULL && obj != NULL) {
 		db_index_entry	*dbie;
 		int		i, size, nq = 0;
-		long		l, count;
+		long		count;
 		bool_t		valid;
 		db_query	qbuf, **qold;
 
@@ -1597,7 +1596,7 @@ db_mindex::storeLDAP(db_query *qin, entry_object *obj, nis_object *o,
 		(void) memset(&qbuf, 0, sizeof (qbuf));
 
 	} else if (qin == 0 && obj == 0 && t->objType == NIS_TABLE_OBJ) {
-		long			i, j, ntab;
+		long			i, ntab;
 		entry_object		**tab;
 
 		READLOCK(table, LDAP_OPERATIONS_ERROR,

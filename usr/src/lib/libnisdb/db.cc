@@ -24,6 +24,8 @@
  *
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2019 RackTop Systems.
  */
 
 #include <stdio.h>
@@ -508,7 +510,6 @@ static bool_t
 apply_log_entry(db_log_entry * j, char * dbchar, int *count)
 {
 	db_mindex * db = (db_mindex *) dbchar;
-	bool_t status = TRUE;
 
 	WRITELOCK(db, FALSE, "db::apply_log_entry");
 

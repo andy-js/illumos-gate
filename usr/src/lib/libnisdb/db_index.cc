@@ -24,9 +24,9 @@
  *
  *  Copyright 1988-2002 Sun Microsystems, Inc.  All rights reserved.
  *  Use is subject to license terms.
+ *
+ *  Copyright 2019 RackTop Systems.
  */
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <stdio.h>
 #include <malloc.h>
@@ -117,11 +117,11 @@ db_index::init(db_key_desc * k)
 static long unsigned
 get_next_hashsize(long unsigned oldsize)
 {
-	long unsigned newsize = 0, n;
+	long unsigned newsize, n = 0;
 	if (oldsize == 0)
 		newsize = hashsizes[0];
 	else {
-		for (n = 0; newsize = hashsizes[n++]; )
+		while ((newsize = hashsizes[n++]) != 0)
 			if (oldsize == newsize) {
 				newsize = hashsizes[n];	/* get next size */
 				break;
@@ -339,6 +339,7 @@ db_index::dump(char *file)
 	else
 		ret = status;
 	WRITEUNLOCK(this, ret, "wu db_index::dump");
+	return (ret);
 }
 
 /*

@@ -24,9 +24,9 @@
  *
  *	Copyright (c) 1988-2000 by Sun Microsystems, Inc.
  *	All Rights Reserved.
+ *
+ *	Copyright 2019 RackTop Systems.
  */
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <stdio.h>
 
@@ -279,7 +279,7 @@ db_index_entry::add(db_index_entry **head, bool_t casein,
 			unsigned long hval, item *i, entryp recnum)
 
 {
-	db_index_entry_p curr, prev, rp, save;
+	db_index_entry_p curr, prev, save;
 
 	/* Search for it in the bucket */
 	for (prev = curr = this; curr != NULL; curr = curr->next) {

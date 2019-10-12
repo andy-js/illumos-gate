@@ -23,6 +23,8 @@
  *
  *  Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  *  Use is subject to license terms.
+ *
+ *  Copyright 2019 RackTop Systems.
  */
 
 #include <stdio.h>
@@ -494,10 +496,9 @@ static void
 delete_result_list(db_next_index_desc* orig)
 {
 	db_next_index_desc* curr, *save_next;
-	for (curr = orig; curr != NULL; 0) {
+	for (curr = orig; curr != NULL; curr = save_next) {
 		save_next = curr->next;
 		delete curr;
-		curr = save_next;
 	}
 }
 
@@ -837,7 +838,7 @@ db_mindex::remove(db_query *q)
 	WRITELOCK2(table, DB_LOCK_ERROR, "w table db_mindex::remove", this);
 	if (q == NULL)  {  /* remove all entries in table */
 		if (table->mapping.toLDAP && !noWriteThrough.flag) {
-			int	queryRes = removeLDAP(q, 0);
+			int	queryRes __unused = removeLDAP(q, 0);
 #ifdef	NISDB_LDAP_DEBUG
 			if (queryRes != LDAP_SUCCESS)
 				abort();

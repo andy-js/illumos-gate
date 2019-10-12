@@ -24,7 +24,7 @@
  * Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  *
- * Copyright 2015 RackTop Systems.
+ * Copyright 2019 RackTop Systems.
  */
 
 
@@ -274,6 +274,7 @@ db_abort_merge_dict()
 	dbstat = FreeDictionary->db_shutdown();
 	if (dbstat != DB_SUCCESS)
 		return (dbstat);
+	return (dbstat);
 }
 
 
@@ -497,7 +498,6 @@ entryName(const char *msg, char *objName, char **tableP) {
  */
 nis_object *
 dbFindObject(char *objName, db_status *statP) {
-	char		buf[MAXPATHLEN+NIS_MAXNAMELEN+1];
 	char		*name, *table = 0;
 	nis_attr	attr;
 	db		*dbase;
@@ -613,7 +613,6 @@ nis_object *
 ldapFindObj(__nis_table_mapping_t *t, char *objName, int *statP) {
 	nis_object	*o;
 	int		stat;
-	const char	*myself = "ldapFindObj";
 
 	if (t == 0) {
 		char	*table, tbuf[MAXPATHLEN + NIS_MAXNAMELEN + 1];
@@ -696,7 +695,6 @@ dbDeleteObj(char *objName) {
 	nis_object	*o;
 	db_status	stat;
 	nisdb_obj_del_t	*nod, *tmp;
-	int		xid;
 	const char	*myself = "dbDeleteObj";
 
 	if (objName == 0)
@@ -773,7 +771,6 @@ dbTouchObj(char *objName) {
 	db_mindex	*mindex;
 	nis_attr	attr;
 	db_query	*query;
-	db_status	stat;
 	const char	*myself = "dbTouchObj";
 
 	table = internalTableName(objName);
@@ -1186,7 +1183,7 @@ replaceMappingObj(__nis_table_mapping_t *t, nis_object *n) {
 int
 setMappingObjTypeEtc(__nis_table_mapping_t *t, nis_object *o) {
 	__nis_table_mapping_t	*x;
-	int			ls, ret;
+	int			ret;
 	int	                i;
 
 	if (t == 0 || o == 0)
@@ -1226,7 +1223,6 @@ dbCreateFromLDAP(char *intName, int *ldapStat) {
 	int			lstat, doDestroy;
 	nis_object		*obj = 0;
 	db_status		dstat;
-	const char		*myself = "dbCreateFromLDAP";
 
 	if (!useLDAPrespository) {
 		if (ldapStat != 0)

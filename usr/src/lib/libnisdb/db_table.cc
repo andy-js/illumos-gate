@@ -25,8 +25,8 @@
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
  *
- * Copyright 2015 RackTop Systems.
  * Copyright (c) 2016 by Delphix. All rights reserved.
+ * Copyright 2019 RackTop Systems.
  */
 
 #include <stdio.h>
@@ -105,11 +105,11 @@ static int tabsizes[] = {
 static long unsigned
 get_new_table_size(long unsigned oldsize)
 {
-	long unsigned newsize = 0, n;
+	long unsigned newsize, n = 0;
 	if (oldsize == 0)
 		newsize = tabsizes[0];
 	else {
-		for (n = 0; newsize = tabsizes[n++]; )
+		while ((newsize = tabsizes[n++]) != 0)
 			if (oldsize == newsize) {
 				newsize = tabsizes[n];	/* get next size */
 				break;
@@ -1115,6 +1115,7 @@ db_table::dump(char *file)
 	else
 		ret = status;
 	READUNLOCK(this, ret, "ru db_table::dump");
+	return (ret);
 }
 
 /* Constructor that loads in the table from the given file */

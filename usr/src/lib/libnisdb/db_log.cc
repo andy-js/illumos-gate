@@ -24,9 +24,9 @@
  *
  * Copyright 2004 Sun Microsystems, Inc.  All rights reserved.
  * Use is subject to license terms.
+ *
+ * Copyright 2019 RackTop Systems.
  */
-
-#pragma ident	"%Z%%M%	%I%	%E% SMI"
 
 #include <stdio.h>
 #include <errno.h>
@@ -233,7 +233,7 @@ copy_log_file(char *oldname, char *newname) {
 		while (size > 0) {
 			w = write(to, &buf[b], size);
 			if (w < 0) {
-				size == -1;
+				size = -1;
 				break;
 			}
 			size -= w;

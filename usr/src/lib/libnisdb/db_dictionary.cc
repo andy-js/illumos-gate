@@ -345,16 +345,7 @@ add_to_bucket(db_table_desc_p bucket, db_table_desc **head, db_table_desc_p td)
 }
 
 
-/* Print bucket starting with this entry. */
-static void
-print_bucket(db_table_desc *head)
-{
-	db_table_desc *np;
-	for (np = head; np != NULL; np = np->next) {
-		printf("%s: %d\n", np->table_name, np->hashval);
-	}
-}
-
+#ifdef DEBUG
 static db_status
 print_table(db_table_desc *tbl)
 {
@@ -363,6 +354,7 @@ print_table(db_table_desc *tbl)
 	printf("%s: %d\n", tbl->table_name, tbl->hashval);
 	return (DB_SUCCESS);
 }
+#endif
 
 
 static int hashsizes[] = {		/* hashtable sizes */
@@ -385,11 +377,11 @@ static int hashsizes[] = {		/* hashtable sizes */
 static unsigned int
 get_next_hashsize(long unsigned oldsize)
 {
-	long unsigned newsize, n;
+	long unsigned newsize, n = 0;
 	if (oldsize == 0)
 		newsize = hashsizes[0];
 	else {
-		for (n = 0; newsize = hashsizes[n++]; )
+		while ((newsize = hashsizes[n++]) != 0)
 			if (oldsize == newsize) {
 				newsize = hashsizes[n];	/* get next size */
 				break;
@@ -719,7 +711,7 @@ db_dictionary::change_table_name(db_table_desc *clone, char *tok, char *repl)
 		    FATAL3("db_dictionary::change_table_name: out of memory.",
 				DB_MEMORY_LIMIT, 0);
 		}
-		if (loc_beg = strstr(clone->table_name, tok)) {
+		if ((loc_beg = strstr(clone->table_name, tok)) != NULL) {
 			loc_end = loc_beg + strlen(tok);
 			int s = loc_beg - clone->table_name;
 			memcpy(newname, clone->table_name, s);
@@ -844,7 +836,6 @@ db_dictionary::massage_dict(char *newdictname, char *tok, char *repl)
 	u_int		i, tbl_count;
 	db_status	status;
 	db_table_desc 	*bucket, *np, *clone, *next_np;
-	char		tail[NIS_MAXNAMELEN];
 	db_dictionary	*tmpptr;
 
 	WRITELOCK(this, DB_LOCK_ERROR, "w db_dictionary::massage_dict");
@@ -2154,7 +2145,7 @@ db_dict_desc_p
 db_dictionary::db_copy_dictionary(void) {
 
 	db_dict_desc_p	tmp;
-	int		i, ok = 1, count = 0;
+	int		i, ok = 1;
 
 	WRITELOCK(this, NULL, "db_dictionary::db_copy_dictionary w");
 
