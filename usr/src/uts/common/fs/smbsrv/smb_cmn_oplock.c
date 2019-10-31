@@ -11,6 +11,7 @@
 
 /*
  * Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2019 RackTop Systems.
  */
 
 /*
@@ -1448,7 +1449,73 @@ smb_oplock_ack_break(
 		goto out;
 	}
 
-	if (type == LEVEL_NONE || type == LEVEL_TWO) {
+	/*
+	 * If the OplockLevel in the acknowledgment is
+	 * SMB2_OPLOCK_LEVEL_LEASE, the server MUST do the following:
+	 */
+	if (type == LEVEL_GRANULAR) {
+		/*
+		 * If Open.OplockState is not Breaking, stop processing the
+		 * acknowledgment, and send an error response with
+		 * STATUS_INVALID_PARAMETER.
+		 */
+		if ((node->n_oplock.ol_state & BREAK_ANY) == 0) {
+			status = NT_STATUS_INVALID_PARAMETER;
+			goto out;
+		}
+	}
+
+	/*
+	 * If Open.OplockLevel is SMB2_OPLOCK_LEVEL_EXCLUSIVE or
+	 * SMB2_OPLOCK_LEVEL_BATCH, and if OplockLevel is not
+	 * SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE,
+	 * the server MUST do the following:
+	 */
+	if ((node->n_oplock.ol_state & (LEVEL_ONE|LEVEL_BATCH)) != 0 &&
+	   type != LEVEL_TWO && type != LEVEL_NONE) {
+		/*
+		 * If Open.OplockState is not Breaking, stop processing the
+		 * acknowledgment, and send an error response with
+		 * STATUS_INVALID_OPLOCK_PROTOCOL.
+		 */
+		if ((node->n_oplock.ol_state & BREAK_ANY) == 0) {
+			status = NT_STATUS_INVALID_OPLOCK_PROTOCOL;
+			goto out;
+		}
+	}
+
+	/*
+	 * If Open.OplockLevel is SMB2_OPLOCK_LEVEL_II, and if OplockLevel
+	 * is not SMB2_OPLOCK_LEVEL_NONE, the server MUST do the following:
+	 */
+	if ((node->n_oplock.ol_state & LEVEL_TWO) != 0 &&
+	    type != LEVEL_NONE) {
+		/*
+		 * If Open.OplockState is not Breaking, stop processing the
+		 * acknowledgment, and send an error response with
+		 * STATUS_INVALID_OPLOCK_PROTOCOL.
+		 */
+		if ((node->n_oplock.ol_state & BREAK_ANY) == 0) {
+			status = NT_STATUS_INVALID_OPLOCK_PROTOCOL;
+			goto out;
+		}
+	}
+
+	/*
+	 * If OplockLevel is SMB2_OPLOCK_LEVEL_II or SMB2_OPLOCK_LEVEL_NONE,
+	 * the server MUST do the following:
+	 */
+	if (type == LEVEL_TWO || type == LEVEL_NONE) {
+		/*
+		 * If Open.OplockState is not Breaking, stop processing the
+		 * acknowledgment, and send an error response with
+		 * STATUS_INVALID_DEVICE_STATE.
+		 */
+		if ((node->n_oplock.ol_state & BREAK_ANY) == 0) {
+			status = NT_STATUS_INVALID_DEVICE_STATE;
+			goto out;
+		}
+
 		/*
 		 * If Open.Stream.Oplock.ExclusiveOpen is not equal to Open,
 		 * the operation MUST be failed with Status set to

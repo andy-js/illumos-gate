@@ -11,6 +11,7 @@
 
 /*
  * Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2019 RackTop Systems.
  */
 
 /*
@@ -96,6 +97,8 @@ smb2_oplock_break_ack(smb_request_t *sr)
 		NewLevel = OPLOCK_LEVEL_BATCH;
 		break;
 	case SMB2_OPLOCK_LEVEL_LEASE:	/* 0xFF */
+		NewLevel = OPLOCK_LEVEL_GRANULAR;
+		break;
 	default:
 		NewLevel = OPLOCK_LEVEL_NONE;
 		break;
@@ -131,6 +134,8 @@ smb2_oplock_break_ack(smb_request_t *sr)
 		smbOplockLevel = SMB2_OPLOCK_LEVEL_BATCH;
 		break;
 	case OPLOCK_LEVEL_GRANULAR:
+		smbOplockLevel = SMB2_OPLOCK_LEVEL_LEASE;
+		break;
 	default:
 		smbOplockLevel = SMB2_OPLOCK_LEVEL_NONE;
 		break;
