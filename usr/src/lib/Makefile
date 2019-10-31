@@ -29,9 +29,9 @@
 # Copyright 2016 Toomas Soome <tsoome@me.com>
 # Copyright 2018 Nexenta Systems, Inc.
 # Copyright (c) 2016, Chris Fraire <cfraire@me.com>.
-# Copyright 2017 RackTop Systems.
 # Copyirght 2018 Jason King
 # Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2019 RackTop Systems.
 #
 
 include ../Makefile.master
@@ -534,11 +534,11 @@ _msg :=		TARGET= _msg
 
 all:			$(SUBDIRS)
 
-install:		$(SUBDIRS) .WAIT install_extra
+install:		$(SUBDIRS)
 
 # extra libraries kept in other source areas
-install_extra:
-	@cd ../cmd/sgs; pwd; $(MAKE) install_lib
+../cmd/sgs/lex ../cmd/sgs/yacc:
+	@cd $@; pwd; $(MAKE) install_lib
 	@pwd
 
 clean clobber:		$(NOWAIT_SUBDIRS:%=%-nodepend)
@@ -555,6 +555,9 @@ _dc:			$(DCSUBDIRS:%=%-nodepend)
 ../cmd/sgs/libconv: crt
 ../cmd/sgs/libdl: crt
 libc:		../cmd/sgs/libconv ../cmd/sgs/libdl
+
+# FIXME: The librtld_db demo program depends on libelf, libl and liby
+../cmd/sgs/librtld_db: ../cmd/sgs/libelf ../cmd/sgs/lex ../cmd/sgs/yacc
 
 libm:		libc
 libmd:		libc
@@ -611,6 +614,7 @@ libdlpi:	libinetutil libdladm
 libds:		libsysevent
 libdtrace:	libproc libgen libctf libmapmalloc
 libdtrace_jni:	libuutil libdtrace
+libdwarf:	../cmd/sgs/libelf
 libefi:		libuuid libsmbios
 libelfsign:	libcryptoutil libkmf ../cmd/sgs/libelf
 libeti:		libcurses

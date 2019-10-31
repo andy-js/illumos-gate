@@ -23,6 +23,7 @@
 # Copyright 2016 RackTop Systems.
 # Copyright 2017 Joyent, Inc.
 # Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
+# Copyright 2019 RackTop Systems.
 #
 
 include		$(SRC)/cmd/Makefile.cmd
@@ -140,11 +141,6 @@ $(MSGDIR):	$(MSGSUBDIRS) FRC
 chkmsg:		libconv $(MSGSUBDIRS) FRC
 
 check:		chkmsg
-
-# built from lib/Makefile
-install_lib:	FRC
-		@ cd lex; pwd; $(MAKE) $@
-		@ cd yacc; pwd; $(MAKE) $@
 
 lint:
 

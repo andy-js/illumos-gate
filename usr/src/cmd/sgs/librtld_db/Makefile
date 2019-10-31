@@ -20,6 +20,11 @@
 #
 #
 # Copyright (c) 1995, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2019 RackTop Systems.
+#
 
 EXTRASUBDIRS =	demo
 include		$(SRC)/cmd/sgs/Makefile.sub
+
+# The demo needs the mach subdirs built first.
+$(EXTRASUBDIRS):	$(MACHSUBDIRS)
