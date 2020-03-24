@@ -23,6 +23,7 @@
  * Copyright (c) 2008, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2018 Nexenta Systems, Inc.  All rights reserved.
  * Copyright (c) 2016 by Delphix. All rights reserved.
+ * Copyright 2020 RackTop Systems.
  */
 
 #ifndef _SMB_SHARE_H
@@ -105,6 +106,7 @@ extern "C" {
 #define	SHOPT_FSO		"fso"	/* Force Shared Oplocks */
 #define	SHOPT_ENCRYPT		"encrypt"
 #define	SHOPT_AUTOHOME		"Autohome"
+#define	SHOPT_NOVSS		"novss"
 
 #define	SMB_DEFAULT_SHARE_GROUP	"smb"
 #define	SMB_PROTOCOL_NAME	"smb"
@@ -187,6 +189,7 @@ extern "C" {
 #define	SMB_SHRF_QUOTAS		0x1000	/* Enable SMB Quotas */
 #define	SMB_SHRF_FSO		0x2000	/* Force Shared Oplocks */
 #define	SMB_SHRF_CA		0x4000	/* Continuous Availability */
+#define	SMB_SHRF_NOVSS		0x8000	/* Disable VSS */
 
 /*
  * Runtime flags

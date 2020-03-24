@@ -23,6 +23,7 @@
  * Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
  * Copyright 2017 Joyent, Inc.
+ * Copyright 2020 RackTop Systems.
  */
 
 #include <smbsrv/smb_door.h>
@@ -657,6 +658,32 @@ smb_kshare_lookup(smb_server_t *sv, const char *shrname)
 	return (shr);
 }
 
+smb_kshare_t *
+smb_kshare_lookup_by_path(smb_server_t *sv, const char *path)
+{
+	smb_avl_t *share_avl;
+	smb_avl_cursor_t cursor;
+	smb_kshare_t *shr;
+
+	ASSERT(path);
+
+	if (!smb_export_isready(sv))
+		return (NULL);
+
+	share_avl = &sv->sv_export.e_share_avl;
+
+	smb_avl_iterinit(share_avl, &cursor);
+
+	while ((shr = smb_avl_iterate(share_avl, &cursor)) != NULL) {
+		if (strcmp(shr->shr_path, path) == 0) {
+			break;
+		}
+		smb_avl_release(share_avl, shr);
+	}
+
+	return (shr);
+}
+
 /*
  * Releases the hold taken on the specified share object
  */
@@ -877,6 +904,8 @@ smb_kshare_decode(nvlist_t *share)
 	(void) nvlist_lookup_string(smb, SHOPT_RW, &tmp.shr_access_rw);
 
 	tmp.shr_flags |= smb_kshare_decode_bool(smb, SHOPT_ABE, SMB_SHRF_ABE);
+	tmp.shr_flags |= smb_kshare_decode_bool(smb, SHOPT_NOVSS,
+	    SMB_SHRF_NOVSS);
 	tmp.shr_flags |= smb_kshare_decode_bool(smb, SHOPT_CATIA,
 	    SMB_SHRF_CATIA);
 	tmp.shr_flags |= smb_kshare_decode_bool(smb, SHOPT_GUEST,

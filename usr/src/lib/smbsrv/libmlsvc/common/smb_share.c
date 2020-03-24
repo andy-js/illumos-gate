@@ -20,7 +20,7 @@
  *
  * Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2018 Nexenta Systems, Inc. All rights reserved.
- * Copyright 2019 RackTop Systems.
+ * Copyright 2020 RackTop Systems.
  */
 
 /*
@@ -1813,6 +1813,12 @@ smb_shr_sa_get(sa_share_t share, sa_resource_t resource, smb_share_t *si)
 		free(val);
 	}
 
+	val = smb_shr_sa_getprop(opts, SHOPT_NOVSS);
+	if (val != NULL) {
+		smb_shr_sa_setflag(val, si, SMB_SHRF_NOVSS);
+		free(val);
+	}
+
 	val = smb_shr_sa_getprop(opts, SHOPT_GUEST);
 	if (val != NULL) {
 		smb_shr_sa_setflag(val, si, SMB_SHRF_GUEST_OK);
@@ -2620,6 +2626,8 @@ smb_shr_encode(smb_share_t *si, nvlist_t **nvlist)
 
 	if ((si->shr_flags & SMB_SHRF_ABE) != 0)
 		rc |= nvlist_add_string(smb, SHOPT_ABE, "true");
+	if ((si->shr_flags & SMB_SHRF_NOVSS) != 0)
+		rc |= nvlist_add_string(smb, SHOPT_NOVSS, "true");
 	if ((si->shr_flags & SMB_SHRF_CATIA) != 0)
 		rc |= nvlist_add_string(smb, SHOPT_CATIA, "true");
 	if ((si->shr_flags & SMB_SHRF_GUEST_OK) != 0)

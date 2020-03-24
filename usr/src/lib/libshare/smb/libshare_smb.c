@@ -22,6 +22,7 @@
 /*
  * Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2017 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2020 RackTop Systems.
  */
 
 /*
@@ -183,6 +184,7 @@ struct option_defs optdefs[] = {
 	{ SHOPT_FSO,		OPT_TYPE_BOOLEAN },
 	{ SHOPT_QUOTAS,		OPT_TYPE_BOOLEAN },
 	{ SHOPT_ENCRYPT,	OPT_TYPE_STRING },
+	{ SHOPT_NOVSS,		OPT_TYPE_BOOLEAN },
 	{ NULL, 0 }
 };
 
@@ -1647,6 +1649,9 @@ smb_add_transient(sa_handle_t handle, smb_share_t *si)
 	opt = (si->shr_flags & SMB_SHRF_ABE) ? "true" : "false";
 	err |= nvlist_add_string(nvl, SHOPT_ABE, opt);
 
+	opt = (si->shr_flags & SMB_SHRF_NOVSS) ? "true" : "false";
+	err |= nvlist_add_string(nvl, SHOPT_NOVSS, opt);
+
 	if ((si->shr_flags & SMB_SHRF_AUTOHOME) == 0) {
 		opt = (si->shr_flags & SMB_SHRF_GUEST_OK) ? "true" : "false";
 		err |= nvlist_add_string(nvl, SHOPT_GUEST, opt);
@@ -2160,6 +2165,9 @@ smb_build_shareinfo(sa_share_t share, sa_resource_t resource, smb_share_t *si)
 
 	if (smb_saprop_getbool(opts, SHOPT_ABE, B_FALSE))
 		si->shr_flags |= SMB_SHRF_ABE;
+
+	if (smb_saprop_getbool(opts, SHOPT_NOVSS, B_FALSE))
+		si->shr_flags |= SMB_SHRF_NOVSS;
 
 	if (smb_saprop_getbool(opts, SHOPT_GUEST, B_FALSE))
 		si->shr_flags |= SMB_SHRF_GUEST_OK;

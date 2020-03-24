@@ -21,6 +21,7 @@
 /*
  * Copyright (c) 2009, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2018 Nexenta Systems, Inc.  All rights reserved.
+ * Copyright 2020 RackTop Systems.
  */
 
 /*
@@ -75,8 +76,10 @@ static int smb_vss_lookup_node(smb_request_t *sr, smb_node_t *, vnode_t *,
 uint32_t
 smb_vss_enum_snapshots(smb_request_t *sr, smb_fsctl_t *fsctl)
 {
-	uint32_t count = 0;
+	uint32_t count;
 	char *root_path;
+	smb_kshare_t *shr;
+	boolean_t no_vss;
 	uint32_t status = NT_STATUS_SUCCESS;
 	smb_gmttoken_response_t snaps;
 
@@ -96,8 +99,18 @@ smb_vss_enum_snapshots(smb_request_t *sr, smb_fsctl_t *fsctl)
 	    MAXPATHLEN) != 0)
 		return (NT_STATUS_INVALID_PARAMETER);
 
-	if (fsctl->MaxOutputResp == SMB_VSS_COUNT_SIZE) {
-		count = smb_vss_get_count(sr->tid_tree, root_path);
+	shr = smb_kshare_lookup_by_path(sr->sr_server, root_path);
+	if (shr == NULL) {
+		kmem_free(root_path, MAXPATHLEN);
+		return (NT_STATUS_INVALID_PARAMETER);
+	}
+
+	no_vss = (shr->shr_flags & SMB_SHRF_NOVSS) != 0;
+	if (fsctl->MaxOutputResp == SMB_VSS_COUNT_SIZE || no_vss) {
+		if (no_vss)
+			count = 0;
+		else
+			count = smb_vss_get_count(sr->tid_tree, root_path);
 		if (smb_mbc_encodef(fsctl->out_mbc, "lllw", count, 0,
 		    (count * SMB_VSS_GMT_NET_SIZE(sr) +
 		    smb_ascii_or_unicode_null_len(sr)), 0) != 0) {
@@ -115,6 +128,7 @@ smb_vss_enum_snapshots(smb_request_t *sr, smb_fsctl_t *fsctl)
 	}
 
 	kmem_free(root_path, MAXPATHLEN);
+	smb_kshare_release(sr->sr_server, shr);
 	return (status);
 }
 

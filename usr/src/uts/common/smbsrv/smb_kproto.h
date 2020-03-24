@@ -23,6 +23,7 @@
  * Copyright (c) 2007, 2010, Oracle and/or its affiliates. All rights reserved.
  * Copyright 2016 Syneto S.R.L.  All rights reserved.
  * Copyright 2019 Nexenta by DDN, Inc. All rights reserved.
+ * Copyright 2020 RackTop Systems.
  */
 
 /*
@@ -921,6 +922,7 @@ int smb_kshare_unexport_list(smb_ioc_share_t *);
 int smb_kshare_info(smb_ioc_shareinfo_t *);
 void smb_kshare_enum(smb_server_t *, smb_enumshare_info_t *);
 smb_kshare_t *smb_kshare_lookup(smb_server_t *, const char *);
+smb_kshare_t *smb_kshare_lookup_by_path(smb_server_t *, const char *);
 void smb_kshare_release(smb_server_t *, smb_kshare_t *);
 int smb_kshare_exec(smb_server_t *, smb_shr_execinfo_t *);
 uint32_t smb_kshare_hostaccess(smb_kshare_t *, smb_session_t *);
