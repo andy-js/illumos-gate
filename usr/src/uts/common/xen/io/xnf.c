@@ -26,6 +26,7 @@
 
 /*
  * Copyright (c) 2014, 2017 by Delphix. All rights reserved.
+ * Copyright 2020 RackTop Systems, Inc.
  */
 
 /*
@@ -1829,6 +1830,7 @@ xnf_mblk_map(xnf_t *xnfp, mblk_t *mp, int *countp)
 				ASSERT(tail != NULL);
 				TXBUF_SETNEXT(tail, txp);
 				txp->tx_head = head;
+				ddi_dma_nextcookie(dma_handle, &dma_cookie);
 			}
 
 			txp->tx_mfn =
@@ -1847,7 +1849,6 @@ xnf_mblk_map(xnf_t *xnfp, mblk_t *mp, int *countp)
 			txp->tx_txreq.size = dma_cookie.dmac_size;
 			txp->tx_txreq.flags = 0;
 
-			ddi_dma_nextcookie(dma_handle, &dma_cookie);
 			nsegs++;
 
 			if (tail != NULL)
