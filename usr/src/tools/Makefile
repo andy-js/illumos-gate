@@ -24,6 +24,7 @@
 # Copyright 2014 Garrett D'Amore <garrett@damore.org>
 # Copyright 2016 Toomas Soome <tsoome@me.com>
 # Copyright (c) 2016, Chris Fraire <cfraire@me.com>.
+# Copyright 2018 RackTop Systems.
 # Copyright 2019 Joyent, Inc.
 # Copyright 2019 OmniOS Community Edition (OmniOSce) Association.
 #
@@ -176,7 +177,7 @@ $(BOOT_SUBDIRS) $(SUBDIRS): $$(DOROOTDIRS) $$(DOROOTONBLDLIBPY) FRC
 $(ROOTDIRS):
 	$(MKDIR) -p -m $(DIRMODE) $@
 
-$(ROOTONBLDLIBPY): $(ROOTDIRS)
+$(ROOTONBLDLIBPY): $(ROOTONBLDLIBPY)$(PYTHON_VERSION)
 	$(RM) -r $@; $(SYMLINK) python$(PYTHON_VERSION) $@
 
 FRC:

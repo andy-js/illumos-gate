@@ -21,6 +21,7 @@
 
 #
 # Copyright (c) 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 #
 
 include $(SRC)/Makefile.master
@@ -53,4 +54,3 @@ $(SUBDIRS):	FRC
 FRC:
 
 include ../../../Makefile.rootdirs
-include ../../../../Makefile.targ

@@ -22,6 +22,7 @@
 #
 # Copyright (c) 1999, 2010, Oracle and/or its affiliates. All rights reserved.
 # Copyright 2015 Igor Kozhukhov <ikozhukhov@gmail.com>
+# Copyright 2018 RackTop Systems.
 #
 #	This makefile drives the production of all implementation architecture
 #	independent modules for Intel processors.
@@ -103,6 +104,18 @@ CLOBBERFILES += $(PRIVS_C)
 #
 all.prereq install.prereq def.prereq: genunix FRC
 	@cd ../i86pc/genassym; pwd; $(MAKE) $(@:%.prereq=%)
+
+#
+# i86pc headers should be installed first
+#
+install_h.prereq: FRC
+	@cd ../i86pc; pwd; $(MAKE) $(NO_STATE) install_h
+
+#
+# i86pc lint libraries should be built first
+#
+lint.prereq: FRC
+	@cd ../i86pc; pwd; $(MAKE) $(NO_STATE) lint
 
 #
 # Nothing to do for any other prerequisite targets.

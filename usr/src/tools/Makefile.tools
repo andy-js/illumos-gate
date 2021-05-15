@@ -20,11 +20,12 @@
 #
 #
 # Copyright (c) 1999, 2010, Oracle and/or its affiliates. All rights reserved.
+# Copyright 2018 RackTop Systems.
 # Copyright 2020 Joyent, Inc.
 #
 # Definitions common to tool source.
 #
-include $(SRC)/Makefile.master
+$(NEED_MASTER)include $(SRC)/Makefile.master
 
 FILEMODE=	0555
 

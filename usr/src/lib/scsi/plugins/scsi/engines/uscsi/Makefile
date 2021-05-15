@@ -23,6 +23,8 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 
 include $(SRC)/Makefile.master
 
@@ -45,5 +47,3 @@ $(SUBDIRS):	FRC
 	@cd $@; pwd; $(MAKE) $(TARGET)
 
 FRC:
-
-include ../../../../../Makefile.targ

@@ -23,6 +23,10 @@
 # Copyright 2008 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
+
+include ../../../Makefile.lib
 
 LIBRARY = libscsi.a
 VERS = .1
@@ -33,7 +37,6 @@ OBJECTS = \
 	scsi_status.o \
 	scsi_subr.o
 
-include ../../../Makefile.lib
 include ../../Makefile.defs
 
 SRCS = $(OBJECTS:%.o=../common/%.c)

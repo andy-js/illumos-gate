@@ -82,9 +82,14 @@ CONTRIB= $(SRC)/contrib
 # (ie, you're using "ws" or some other bootstrapping method) then you need
 # this definition in order to avoid the subshell invocation mentioned above.
 #
+# NEED_MASTER is set to POUND_SIGN on inclusion.  This is meant to be used
+# to prevent multiple inclusions.
+#
 
 PRE_POUND=				pre\#
 POUND_SIGN=				$(PRE_POUND:pre\%=%)
+
+NEED_MASTER=				$(POUND_SIGN)
 
 NOT_RELEASE_BUILD=
 RELEASE_BUILD=				$(POUND_SIGN)
@@ -1163,8 +1168,8 @@ BOOTBANNER3=
 BOOTBANNER4=
 BOOTBANNER5=
 
-PROCESS_COMMENT=  @?${MCS} -d -a $(RELEASE_CM) -a $(DEV_CM)
-$(RELEASE_BUILD)PROCESS_COMMENT=   @?${MCS} -d -a $(RELEASE_CM)
+PROCESS_COMMENT=  @${MCS} -d -a $(RELEASE_CM) -a $(DEV_CM)
+$(RELEASE_BUILD)PROCESS_COMMENT=   @${MCS} -d -a $(RELEASE_CM)
 
 STRIP_STABS=			   $(STRIP) -x $@
 $(SRCDBGBLD)STRIP_STABS=	   :

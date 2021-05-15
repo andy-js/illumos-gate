@@ -23,6 +23,8 @@
 # Copyright 2009 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
 #
+# Copyright 2018 RackTop Systems.
+#
 
 PROG=	install.bin
 OBJS=	$(PROG).o stdusers.o
@@ -48,10 +50,11 @@ $(PROG): $(OBJS)
 	$(LINK.c) -o $@ $(OBJS) $(LDLIBS)
 	$(POST_PROCESS)
 
-
-install: all .WAIT $(ROOTONBLDMACHPROG)
+$(ROOTONBLDBINMACH)/install: $(ROOTONBLDMACHPROG)
 	$(RM) $(ROOTONBLDBINMACH)/install
 	$(LN) $(ROOTONBLDMACHPROG) $(ROOTONBLDBINMACH)/install
+
+install: $(ROOTONBLDBINMACH)/install
 
 lint:	lint_SRCS
 
